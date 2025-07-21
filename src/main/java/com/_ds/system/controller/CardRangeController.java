@@ -31,7 +31,6 @@ public class CardRangeController {
 
         return service.findCardRangeForPan(pan)
                 .map(range -> {
-                    //  var response = new CardRangeLookupResponse(pan,range.getStartRange(), range.getEndRange(), range.getThreeDSMethodURL(),"PAN found");
                     return ResponseEntity.ok(new CardRangeLookupResponse(pan, range.getStartRange(), range.getEndRange(), range.getThreeDSMethodURL(), "PAN found"));
                 })
                 .orElseGet(() -> ResponseEntity.ok(new CardRangeLookupResponse("No PAN found")));

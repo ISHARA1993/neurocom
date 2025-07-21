@@ -22,10 +22,8 @@ public class CardRangeServiceImpl implements CardRangeService {
 
     public Optional<CardRangeData> findCardRangeForPan(String pan) {
         try {
-            Long panNumber = Long.parseLong(pan);
-            //add query to repository
-            CardRangeData result = null;
-            return Optional.ofNullable(result);
+            long panNumber = Long.parseLong(pan);
+            return repository.findByPanRange(panNumber);
         } catch (NumberFormatException e) {
             return Optional.empty();
         }
