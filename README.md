@@ -171,14 +171,6 @@ A larger sample JSON (50+ ranges) is available for bulk testing.
 
 ---
 
-## 🛠️ Future Enhancements  
-
-- ✅ Add database persistence (MySQL/PostgreSQL) instead of H2  
-- ✅ Add Swagger/OpenAPI documentation  
-- ✅ Add pagination & filtering for stored ranges  
-
----
-
 ## 🤝 Contributing  
 
 1. Fork the repo  
