@@ -168,7 +168,6 @@ It includes:
 ## 📝 Example Test Data  
 
 A larger sample JSON (50+ ranges) is available for bulk testing.  
-Save it as `sample-card-ranges.json` and POST it to `/3ds/card-ranges/store`.  
 
 ---
 
