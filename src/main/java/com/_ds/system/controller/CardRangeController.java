@@ -3,7 +3,6 @@ package com._ds.system.controller;
 import com._ds.system.dto.CardRangeLookupResponse;
 import com._ds.system.model.CardRangeData;
 import com._ds.system.service.CardRangeService;
-import com._ds.system.service.CardRangeServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,17 +30,10 @@ public class CardRangeController {
 
 
         Optional<CardRangeData> response= service.findCardRangeForPan(pan);
+        return response.isPresent()?
+                ResponseEntity.ok(
+                        new CardRangeLookupResponse(pan, response.get().getStartRange(), response.get().getEndRange(), response.get().getThreeDSMethodURL(), "PAN found")):
+        ResponseEntity.notFound().build();
 
-        if(response.isPresent())
-        {
-            return ResponseEntity.ok(new CardRangeLookupResponse(pan, response.get().getStartRange(), response.get().getEndRange(), response.get().getThreeDSMethodURL(), "PAN found"));
-        }
-        return ResponseEntity.notFound().build();
-
-//        return service.findCardRangeForPan(pan)
-//                .map(range -> {
-//                    return ResponseEntity.ok(new CardRangeLookupResponse(pan, range.getStartRange(), range.getEndRange(), range.getThreeDSMethodURL(), "PAN found"));
-//                })
-//                .orElseGet(() -> ResponseEntity.ok(new CardRangeLookupResponse("No PAN found")));
     }
 }
