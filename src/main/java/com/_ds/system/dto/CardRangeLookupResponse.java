@@ -6,6 +6,6 @@ public record CardRangeLookupResponse(String pan, Long startRange, Long endRange
 
 
     public CardRangeLookupResponse(String message) {
-        this("", 0L, 0L, "", message);
+        this(null, null, null, null, message);
     }
 }

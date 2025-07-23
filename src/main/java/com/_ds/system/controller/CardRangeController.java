@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/3ds/card-ranges")
@@ -15,7 +16,7 @@ public class CardRangeController {
 
     private final CardRangeService service;
 
-    public CardRangeController(CardRangeServiceImpl service) {
+    public CardRangeController(CardRangeService service) {
         this.service = service;
     }
 
@@ -26,13 +27,21 @@ public class CardRangeController {
     }
 
     @GetMapping("/lookup/{pan}")
-    public ResponseEntity<CardRangeLookupResponse> lookupCardRange(@PathVariable String pan) {
+    public ResponseEntity<?> lookupCardRange(@PathVariable String pan) {
 
 
-        return service.findCardRangeForPan(pan)
-                .map(range -> {
-                    return ResponseEntity.ok(new CardRangeLookupResponse(pan, range.getStartRange(), range.getEndRange(), range.getThreeDSMethodURL(), "PAN found"));
-                })
-                .orElseGet(() -> ResponseEntity.ok(new CardRangeLookupResponse("No PAN found")));
+        Optional<CardRangeData> response= service.findCardRangeForPan(pan);
+
+        if(response.isPresent())
+        {
+            return ResponseEntity.ok(new CardRangeLookupResponse(pan, response.get().getStartRange(), response.get().getEndRange(), response.get().getThreeDSMethodURL(), "PAN found"));
+        }
+        return ResponseEntity.notFound().build();
+
+//        return service.findCardRangeForPan(pan)
+//                .map(range -> {
+//                    return ResponseEntity.ok(new CardRangeLookupResponse(pan, range.getStartRange(), range.getEndRange(), range.getThreeDSMethodURL(), "PAN found"));
+//                })
+//                .orElseGet(() -> ResponseEntity.ok(new CardRangeLookupResponse("No PAN found")));
     }
 }

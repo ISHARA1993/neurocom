@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CardRangeServiceImpl implements CardRangeService {
+public class CardRangeServiceImpl implements CardRangeService{
 
     private final CardRangeRepository repository;
 
