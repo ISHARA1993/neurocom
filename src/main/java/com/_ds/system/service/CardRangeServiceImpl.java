@@ -1,5 +1,6 @@
 package com._ds.system.service;
 
+import com._ds.system.dto.Response;
 import com._ds.system.model.CardRangeData;
 import com._ds.system.repository.CardRangeRepository;
 import org.springframework.stereotype.Service;
@@ -16,14 +17,16 @@ public class CardRangeServiceImpl implements CardRangeService{
         this.repository = repository;
     }
 
-    public void storeCardRanges(List<CardRangeData> ranges) {
-        repository.saveAll(ranges);
+    public boolean storeCardRanges(List<CardRangeData> ranges) {
+        List<CardRangeData> cardRangeDataList = repository.saveAll(ranges);
+        return !cardRangeDataList.isEmpty();
     }
 
-    public Optional<CardRangeData> findCardRangeForPan(String pan) {
+    public Optional<Response> findCardRangeForPan(String pan) {
         try {
             long panNumber = Long.parseLong(pan);
-            return repository.findByPanRange(panNumber);
+            Optional<CardRangeData> byPanRange = repository.findByPanRange(panNumber);
+            return byPanRange.map(cardRangeData -> new Response(cardRangeData, "PAN :" + pan));
         } catch (NumberFormatException e) {
             return Optional.empty();
         }

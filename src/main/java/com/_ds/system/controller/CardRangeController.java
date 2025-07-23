@@ -1,6 +1,7 @@
 package com._ds.system.controller;
 
 import com._ds.system.dto.CardRangeLookupResponse;
+import com._ds.system.dto.Response;
 import com._ds.system.model.CardRangeData;
 import com._ds.system.service.CardRangeService;
 import org.springframework.http.ResponseEntity;
@@ -20,20 +21,19 @@ public class CardRangeController {
     }
 
     @PostMapping("/store")
-    public ResponseEntity<String> storeCardRanges(@RequestBody List<CardRangeData> cardRanges) {
-        service.storeCardRanges(cardRanges);
-        return ResponseEntity.ok("Card ranges stored successfully in H2 DB!");
+    public ResponseEntity<?> storeCardRanges(@RequestBody List<CardRangeData> cardRanges) {
+        boolean isSuccess = service.storeCardRanges(cardRanges);
+        return isSuccess ? ResponseEntity.ok("Card ranges stored successfully in H2 DB!") : ResponseEntity.noContent().build();
     }
 
     @GetMapping("/lookup/{pan}")
-    public ResponseEntity<?> lookupCardRange(@PathVariable String pan) {
-
-
-        Optional<CardRangeData> response= service.findCardRangeForPan(pan);
-        return response.isPresent()?
-                ResponseEntity.ok(
-                        new CardRangeLookupResponse(pan, response.get().getStartRange(), response.get().getEndRange(), response.get().getThreeDSMethodURL(), "PAN found")):
-        ResponseEntity.notFound().build();
-
+    public ResponseEntity<Response> lookupCardRange(@PathVariable String pan) {
+        Optional<Response> response = service.findCardRangeForPan(pan);
+        if (response.isPresent()) {
+            if (response.get().o() instanceof CardRangeData) {
+                return ResponseEntity.ok(response.get());
+            }
+        }
+        return ResponseEntity.notFound().build();
     }
 }
